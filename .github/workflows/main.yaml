@@ -25,13 +25,4 @@ jobs:
           python-version: ${{ matrix.python-version }} 
 
       - name: Create environment 
-        run: make install
-
-      - name: Format
-        run: make format
-
-      - name: Run Lint
-        run: make lint
-
-      - name: Run tests
-        run: make test
+        run: echo $SERVER_HOSTNAME

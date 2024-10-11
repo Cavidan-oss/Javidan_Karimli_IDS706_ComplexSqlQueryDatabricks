@@ -1,5 +1,10 @@
-import sqlite3
+from dotenv import load_dotenv
+import os
 
-conn = sqlite3.connect('ramil.db')
+load_dotenv()
+
+print(os.environ['SERVER_HOSTNAME'])
+
+
 
 

@@ -3,7 +3,7 @@ import os
 
 load_dotenv()
 
-print(os.environ)
+print(os.environ['SERVER_HOSTNAME'])
 
 
 

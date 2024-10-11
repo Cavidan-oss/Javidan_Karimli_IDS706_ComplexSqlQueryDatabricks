@@ -7,6 +7,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+OLYMPIC_DICTIONARY_PATH = 'https://raw.githubusercontent.com/Cavidan-oss/Javidan_Karimli_IDS706_ComplexSqlQueryDatabricks/refs/heads/main/data/olympic_dictionary.csv'
+OLYMPIC_SUMMER_PATH = ''
+
+
 class SQL:
     @classmethod
     def read_sql(cls, query, **params):
@@ -19,84 +23,10 @@ class SQL:
 
 class ETLHelper:
 
-    @classmethod
-    def insert(cls, connection, table_name, values):
-
-        try:
-            cursor = connection.cursor()
-
-            _colunms = ", ".join(values.keys())
-            _values = ", ".join(values.values())
-
-            base_insert_query = SQL.read_sql(
-                "src/sql/insert.sql",
-                table_name=table_name,
-                columns=_colunms,
-                values=_values,
-            )
-
-            print(base_insert_query)
-
-            cursor.execute(base_insert_query)
-            connection.commit()
-
-            inserted_id = cursor.lastrowid
-
-            return inserted_id
-
-        except Exception as e:
-            print(e)
-            return None
 
     @classmethod
-    def read_by_id(cls, connection, table_name, id, id_col_name="ID"):
-
-        cursor = connection.cursor()
-
-        # Execute a query to fetch all data from the table
-        query = f"SELECT * FROM {table_name} Where {id_col_name} = {id} "
-        print(query)
-        cursor.execute(query)
-
-        # Fetch all rows from the executed query
-        data = cursor.fetchone()
-
-        # Fetch the column names
-        column_names = [description[0] for description in cursor.description]
-
-        # Combine column names with the data for better output formatting
-        result = {"columns": column_names, "data": data}
-
-        return result
-
-    @classmethod
-    def read_all(cls, connection, table_name):
-        try:
-            # Create a cursor object
-            cursor = connection.cursor()
-
-            # Execute a query to fetch all data from the table
-            query = f"SELECT * FROM {table_name}"
-            print(query)
-            cursor.execute(query)
-
-            # Fetch all rows from the executed query
-            data = cursor.fetchall()
-
-            # Fetch the column names
-            column_names = [description[0] for description in cursor.description]
-
-            # Combine column names with the data for better output formatting
-            result = {"columns": column_names, "data": data}
-
-            return result
-
-        except Exception as e:
-            print(f"An error occurred: {e}")
-            return None
-
-    @classmethod
-    def load_csv_to_db(cls, csv_file_path, conn, table_name, create_table_sql=None):
+    def load_csv_to_db(cls, csv_file_path, conn, table_name, create_table_sql):
+        cursor = None
         # Create a cursor object
         try:
             cursor = conn.cursor()
@@ -107,92 +37,32 @@ class ETLHelper:
                 # Read the header row to get column names
                 header = next(csv_reader)
 
-                # Create a column definition for all columns as TEXT
-                columns_to_create_table = ", ".join(
-                    [
-                        f"{col.replace('.', '_').replace(' ', '_')} TEXT"
-                        for col in header
-                    ]
-                )
+                # Execute the provided CREATE TABLE SQL statement if any
+                cursor.execute(SQL.read_sql(create_table_sql))
 
-                # Execute the CREATE TABLE statement
-                cursor.execute(
-                    f"CREATE TABLE IF NOT EXISTS {table_name} ({columns_to_create_table})"
-                )
-
+                # Prepare placeholders for the insert operation
                 placeholders = ", ".join(["?" for _ in header])
 
-                # Truncate the destionation table
-                cursor.execute(f"Delete from {table_name}")
-                # cursor.execute(f"DELETE FROM SQLITE_SEQUENCE WHERE name='{table_name}' ")
-
-                sql_insert = f"INSERT INTO {table_name}  VALUES ({placeholders})"
+                # Truncate the destination table
+                cursor.execute(f"TRUNCATE TABLE {table_name}")
 
                 # Insert each row into the table
+                sql_insert = f"INSERT INTO {table_name} VALUES ({placeholders})"
                 for row in csv_reader:
                     cursor.execute(sql_insert, row)
 
-                # INSERT INTO cədvəl(col1 , col2) VALUES ( ? , ? )
             # Commit the transaction
             conn.commit()
             return True
-
+        
         except Exception as e:
-            print(e)
+            print(f"Error: {e}")
+            conn.rollback()
             return False
-
-    @classmethod
-    def update(cls, connection, table_name, ids, update_values):
-        try:
-            cursor = connection.cursor()
-
-            formatted_updates = ", ".join(
-                [
-                    f"{col_name} = '{update_val}'"
-                    for col_name, update_val in update_values.items()
-                ]
-            )
-            formatted_ids = ", ".join(map(str, ids))
-
-            base_update_query = SQL.read_sql(
-                "src/sql/update.sql",
-                id=formatted_ids,
-                table_name=table_name,
-                updates=formatted_updates,
-            )
-            print(base_update_query)
-
-            cursor.execute(base_update_query)
-            connection.commit()
-            print(f"{formatted_ids} are updated successfully")
-
-            return True
-
-        except Exception as e:
-            print(e)
-            return None
-
-    @classmethod
-    def delete(cls, connection, table_name, ids):
-        try:
-            cursor = connection.cursor()
-
-            formatted_ids = ", ".join(map(str, ids))
-
-            base_delete_query = SQL.read_sql(
-                "src/sql/delete.sql", id=formatted_ids, table_name=table_name
-            )
-            print(base_delete_query)
-
-            cursor.execute(base_delete_query)
-            connection.commit()
-            print(f"{formatted_ids} are deleted successfully")
-
-            return True
-
-        except Exception as e:
-            print(e)
-            return None
+        
+        finally:
+            if cursor:
+                cursor.close()
 
     @classmethod
     def execute_query(cls, connection, query):
@@ -207,6 +77,23 @@ class ETLHelper:
         except Exception as e:
             print(e)
             return False
+
+    @classmethod
+    def fetchall_result(cls, connection, query, query_params):
+        cursor = None
+        try:
+            cursor = connection.cursor()
+            full_exec_query = SQL.read_sql(query, **query_params )
+            print(f"Query to be executed - \n{full_exec_query}")
+            cursor.execute(full_exec_query)
+            return cursor.fetchall()
+        
+        except Exception as e:
+            print(f"Exception occured - {e}")
+            return []
+        
+        finally:
+            cursor.close()
 
     @classmethod
     def connect_db(cls, type_of_database, database_conn):
@@ -225,7 +112,7 @@ class ETLHelper:
 
         else:
             raise NotImplementedError(
-                "Databases other than sqllite not implemented yet!!!"
+                "Databases other than sqllite, databricks not implemented yet!!!"
             )
 
 
@@ -261,7 +148,19 @@ if __name__ == '__main__':
                         }
     )
 
-    print(type(conn))
+    extract_csv()
+
+
+    load_csv_to_db()
+
+    # print(type(conn))
+
+    # res = ETLHelper.fetchall_result(conn, query = '')
+    # print(res, type(res))
+
+
+
+
 
     conn.close()
 

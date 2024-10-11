@@ -3,7 +3,7 @@ import os
 
 load_dotenv()
 
-print(os.environ['SERVER_HOSTNAME'])
+print(os.environ['secrets.SERVER_HOSTNAME'])
 
 
 

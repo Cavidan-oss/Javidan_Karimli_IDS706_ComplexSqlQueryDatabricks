@@ -1,8 +1,11 @@
-import os
 import requests
 import sqlite3
 import csv
+from databricks import sql
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
 class SQL:
     @classmethod
@@ -207,9 +210,17 @@ class ETLHelper:
 
     @classmethod
     def connect_db(cls, type_of_database, database_conn):
-
+        
         if type_of_database.lower() == "sqllite":
             conn = sqlite3.connect(f"{database_conn}.db")
+            return conn
+        
+        if type_of_database.lower() == 'databricks':
+
+            conn = sql.connect(
+                            **database_conn
+                            )
+            
             return conn
 
         else:
@@ -230,4 +241,27 @@ def extract_csv(
         with open(os.path.join(directory, file_path), "wb") as f:
             f.write(r.content)
     return file_path
+
+
+
+
+
+
+if __name__ == '__main__':
+    server_host_name = os.getenv('SERVER_HOSTNAME')
+    http_path = os.getenv('HTTP_PATH')
+    access_token = os.getenv('ACCESS_TOKEN')
+    
+    conn = ETLHelper.connect_db(
+        type_of_database='databricks',
+        database_conn= {
+                        "server_hostname" : server_host_name,
+                        "http_path" : http_path,
+                        "access_token" : access_token
+                        }
+    )
+
+    print(type(conn))
+
+    conn.close()
 

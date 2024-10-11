@@ -29,5 +29,5 @@ jobs:
 
       - name: Test Code
         env: # Or as an environment variable
-        super_secret: ${{ secrets.SERVER_HOSTNAME }}
+          super_secret: ${{ secrets.SERVER_HOSTNAME }}
         run: python3 test.py

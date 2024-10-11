@@ -25,4 +25,7 @@ jobs:
           python-version: ${{ matrix.python-version }} 
 
       - name: Create environment 
+        run: make install
+
+      - name: Test Code
         run: python3 test.py

@@ -31,6 +31,7 @@ class ETLHelper:
 
             with open(csv_file_path, mode="r", newline="", encoding="utf-8") as csvfile:
                 csv_reader = csv.reader(csvfile)
+                next(csv_reader)
 
                 cursor.execute(SQL.read_sql(create_table_sql))
 

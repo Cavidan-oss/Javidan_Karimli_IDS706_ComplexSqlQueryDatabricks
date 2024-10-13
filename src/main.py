@@ -69,4 +69,5 @@ def perform_analytics():
 
 
 if __name__ == "__main__":
+    extract_to_databricks()
     perform_analytics()

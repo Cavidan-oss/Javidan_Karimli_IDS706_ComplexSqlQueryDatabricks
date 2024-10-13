@@ -1,5 +1,7 @@
 
-# Complex SQL Query Project
+# Complex SQL Query Project using Databricks
+
+[![CI Pipeline](https://github.com/nogibjj/Javidan_Karimli_IDS706_ComplexSqlQueryDatabricks/actions/workflows/main.yaml/badge.svg)](https://github.com/nogibjj/Javidan_Karimli_IDS706_ComplexSqlQueryDatabricks/actions/workflows/main.yaml)
 
 ## Project Overview
 This project involves designing and implementing a complex SQL query using Databricks, covering aspects such as joins, aggregation, and sorting. The query will provide insights into the given datasets by combining multiple tables and performing aggregations to highlight relevant patterns. The results will be documented and explained, focusing on functionality and clarity. Src/lib python file contains necessary function to connect Databricks, extracting the csv file and pushing into the respective Databricks table.
@@ -36,7 +38,7 @@ ORDER BY cnt DESC
 ```
 
 ### Explanation
-- **JOIN**: We join the `OlympicDictionary` dataset with the `OlympicSummer` using `code`. This allows us to connect country information details with their sportments in respective performances in the Summer Olympics.
+- **JOIN**: We join the `olympicdictionary_jk645` dataset with the `olympicsummer_jk645` using `code`. This allows us to connect country information details with their sportments in respective performances in the Summer Olympics.
 - **GROUP BY**: The query groups the results by `Country`, `Medal`, to count the total number of each medals won by each country.
 - **Having**: Removing unnecessary NULL values from the result.
 - **ORDER BY**: The query sorts the final output by the `TotalMedals` (called cnt) in descending order, showing countries with the highest number of medals first.

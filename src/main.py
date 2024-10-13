@@ -32,12 +32,17 @@ def extract_to_databricks():
         url=OLYMPIC_SUMMER_PATH, file_path="olympic_summer.csv", directory="data"
     )
 
+    # ETLHelper.execute_query('DROP TABLE ids706_data_engineering.default.olympicdictionary_jk645;')
+
     ETLHelper.load_csv_to_db(
         olympic_dictionary_path,
         conn,
         table_name="OlympicDictionary_jk645",
         create_table_sql="src/sql/create_sql_olympic_dictionary.sql",
     )
+
+    # ETLHelper.execute_query('DROP TABLE ids706_data_engineering.default.olympicsummer_jk645;')
+
 
     ETLHelper.load_csv_to_db(
         olympic_summer_path,

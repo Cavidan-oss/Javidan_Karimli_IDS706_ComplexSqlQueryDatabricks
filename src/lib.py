@@ -35,7 +35,7 @@ class ETLHelper:
 
                 cursor.execute(SQL.read_sql(create_table_sql))
 
-                cursor.execute(f"TRUNCATE TABLE {table_name}")
+                cursor.execute(f"TRUNCATE TABLE {table_name};")
 
                 sql_insert = f"INSERT INTO {table_name} VALUES "
 

@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-OLYMPIC_DICTIONARY_PATH = "https://raw.githubusercontent.com/Cavidan-oss/Javidan_Karimli_IDS706_ComplexSqlQueryDatabricks/refs/heads/main/data/olympic_dictionary.csv"
-OLYMPIC_SUMMER_PATH = "https://raw.githubusercontent.com/Cavidan-oss/Javidan_Karimli_IDS706_ComplexSqlQueryDatabricks/refs/heads/main/data/olympic_summer.csv"
+OLYMPIC_DICTIONARY_PATH = "https://github.com/nogibjj/Javidan_Karimli_IDS706_ComplexSqlQueryDatabricks/blob/af712012aa34bc3f30c124f85848d9417420dc66/data/olympic_dictionary.csv"
+OLYMPIC_SUMMER_PATH = "https://github.com/nogibjj/Javidan_Karimli_IDS706_ComplexSqlQueryDatabricks/blob/af712012aa34bc3f30c124f85848d9417420dc66/data/olympic_summer.csv"
 
 
 class SQL:

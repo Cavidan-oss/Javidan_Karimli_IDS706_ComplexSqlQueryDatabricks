@@ -6,8 +6,8 @@ This project involves designing and implementing a complex SQL query using Datab
 
 ## Datasets
 We are using two datasets hosted on the project repository:
-- **Olympic Dictionary**: [CSV file link](https://raw.githubusercontent.com/Cavidan-oss/Javidan_Karimli_IDS706_ComplexSqlQueryDatabricks/refs/heads/main/data/olympic_dictionary.csv)
-- **Olympic Summer**: [CSV file link](https://raw.githubusercontent.com/Cavidan-oss/Javidan_Karimli_IDS706_ComplexSqlQueryDatabricks/refs/heads/main/data/olympic_summer.csv)
+- **Olympic Dictionary**: [CSV file link](https://github.com/nogibjj/Javidan_Karimli_IDS706_ComplexSqlQueryDatabricks/blob/af712012aa34bc3f30c124f85848d9417420dc66/data/olympic_dictionary.csv)
+- **Olympic Summer**: [CSV file link](https://github.com/nogibjj/Javidan_Karimli_IDS706_ComplexSqlQueryDatabricks/blob/af712012aa34bc3f30c124f85848d9417420dc66/data/olympic_summer.csv)
 
 These datasets contain information about Olympic athletes, events, and medals, which will be used to form the basis of our query.
 
@@ -49,4 +49,10 @@ The query is expected to return:
 - **TotalMedals**: The total number of medals won by each country.
 
 
+### Results Images
+
+- **Terminal Output**: ![Terminal Output](https://github.com/nogibjj/Javidan_Karimli_IDS706_ComplexSqlQueryDatabricks/blob/af712012aa34bc3f30c124f85848d9417420dc66/img/Screenshot%202024-10-13%20at%206.10.40%E2%80%AFPM.png)
+
+
+- **Databrick Console Output**: ![Databrick Console Output](https://github.com/nogibjj/Javidan_Karimli_IDS706_ComplexSqlQueryDatabricks/blob/af712012aa34bc3f30c124f85848d9417420dc66/img/Screenshot%202024-10-13%20at%206.25.57%E2%80%AFPM.png)
 

@@ -6,7 +6,7 @@ format:
 	black test/*.py
 
 test_file:
-	pytest -vv --nbval -cov=my_lib -cov=main test/test_*.py
+	pytest -vv -cov=my_lib -cov=main test/test_*.py
 
 lint:
 	ruff check src/*.py

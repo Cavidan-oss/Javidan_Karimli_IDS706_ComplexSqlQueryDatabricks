@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 OLYMPIC_DICTIONARY_PATH = 'https://raw.githubusercontent.com/Cavidan-oss/Javidan_Karimli_IDS706_ComplexSqlQueryDatabricks/refs/heads/main/data/olympic_dictionary.csv'
-OLYMPIC_SUMMER_PATH = ''
+OLYMPIC_SUMMER_PATH = 'https://raw.githubusercontent.com/Cavidan-oss/Javidan_Karimli_IDS706_ComplexSqlQueryDatabricks/refs/heads/main/data/olympic_summer.csv'
 
 
 class SQL:
@@ -41,15 +41,30 @@ class ETLHelper:
                 cursor.execute(SQL.read_sql(create_table_sql))
 
                 # Prepare placeholders for the insert operation
-                placeholders = ", ".join(["?" for _ in header])
+                # placeholders = ", ".join(["?" for _ in header])
 
                 # Truncate the destination table
                 cursor.execute(f"TRUNCATE TABLE {table_name}")
 
                 # Insert each row into the table
-                sql_insert = f"INSERT INTO {table_name} VALUES ({placeholders})"
+                sql_insert = f"INSERT INTO {table_name} VALUES "
+
+                rows = []
                 for row in csv_reader:
-                    cursor.execute(sql_insert, row)
+                    processed_row = ['Null' if value == '' else value for value in row]
+                    rows.append(processed_row)
+
+
+                # Prepare the full SQL statement
+                # We'll format this later with the actual values
+                values_str = ', '.join(
+                    [f"({', '.join([repr(v) for v in row])})" for row in rows]
+)
+                full_sql = sql_insert + values_str.replace("'Null'", 'Null')
+                # Complete the SQL query
+
+                # print(full_sql)
+                cursor.execute(full_sql)
 
             # Commit the transaction
             conn.commit()
@@ -117,8 +132,8 @@ class ETLHelper:
 
 
 def extract_csv(
-    url="https://raw.githubusercontent.com/fivethirtyeight/data/refs/heads/master/chess-transfers/transfers.csv",
-    file_path="chess_transfers.csv",
+    url,
+    file_path,
     directory="data",
 ):
     """Extract a url to a file path"""
@@ -127,7 +142,7 @@ def extract_csv(
     with requests.get(url) as r:
         with open(os.path.join(directory, file_path), "wb") as f:
             f.write(r.content)
-    return file_path
+    return os.path.join(directory, file_path)
 
 
 
@@ -148,11 +163,29 @@ if __name__ == '__main__':
                         }
     )
 
-    extract_csv()
+    full_file_path = extract_csv(
+        url = 'data/olympic_dictionary',
+        file_path='olympic_dictionary.csv',
+        directory='data'
+    )
 
 
-    load_csv_to_db()
+    ETLHelper.load_csv_to_db( 
+                              'data/olympic_dictionary.csv',
+                              conn,
+                              table_name='OlympicDictionary_jk645',
+                              create_table_sql='src/sql/create_sql_olympic_dictionary.sql'
+                            )
 
+    ETLHelper.load_csv_to_db( 
+                                'data/olympic_summer.csv',
+                                conn,
+                                table_name='OlympicSummer_jk645',
+                                create_table_sql='src/sql/create_sql_olympic_summer.sql'
+                                )
+
+
+    # res = ETLHelper.fetchall_result(conn, query = 'SELECT')
     # print(type(conn))
 
     # res = ETLHelper.fetchall_result(conn, query = '')

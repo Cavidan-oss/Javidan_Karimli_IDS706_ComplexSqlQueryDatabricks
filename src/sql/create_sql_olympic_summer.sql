@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS olympic_medals (
+CREATE TABLE IF NOT EXISTS OlympicSummer_jk645 (
     Year INT,
     City STRING,
     Sport STRING,

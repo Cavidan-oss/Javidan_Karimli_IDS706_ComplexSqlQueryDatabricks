@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS country_stats (
+CREATE TABLE IF NOT EXISTS OlympicDictionary_jk645 (
     Country STRING,
     Code STRING,
     Population BIGINT,

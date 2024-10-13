@@ -2,7 +2,7 @@
 # Complex SQL Query Project
 
 ## Project Overview
-This project involves designing and implementing a complex SQL query using Databricks, covering aspects such as joins, aggregation, and sorting. The query will provide insights into the given datasets by combining multiple tables and performing aggregations to highlight relevant patterns. The results will be documented and explained, focusing on functionality and clarity.
+This project involves designing and implementing a complex SQL query using Databricks, covering aspects such as joins, aggregation, and sorting. The query will provide insights into the given datasets by combining multiple tables and performing aggregations to highlight relevant patterns. The results will be documented and explained, focusing on functionality and clarity. Src/lib python file contains necessary function to connect Databricks, extracting the csv file and pushing into the respective Databricks table.
 
 ## Datasets
 We are using two datasets hosted on the project repository:
@@ -50,8 +50,3 @@ The query is expected to return:
 
 
 
-## CI/CD Pipeline
-A Continuous Integration/Continuous Deployment (CI/CD) pipeline has been set up using GitHub Actions. This pipeline ensures the following:
-1. **Syntax Validation**: The SQL scripts are automatically checked for syntax errors.
-2. **Unit Testing**: The query is tested to verify its functionality.
-3. **Deployment**: Upon successful execution, the results are deployed for analysis.
